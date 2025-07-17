@@ -9,16 +9,8 @@ const app = express();
 export const privateKey = fs.readFileSync('id_rsa_priv.pem', 'utf8');
 export const publicKey = fs.readFileSync('id_rsa_pub.pem', 'utf8');
 
-// sequelize.sync({ force: true }) // Use { force: true } only for development to reset tables
-//   .then(() => {
-//     console.log('Database synchronized!');
-//   })
-//   .catch((err) => {
-//     console.error('Error syncing database:', err);
-//   });
-
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:8000'],
+  origin: [process.env.FRONTEND_URL, process.env.BACKEND_URL],
   credentials: true,
 }))
 app.use(cookieParser())

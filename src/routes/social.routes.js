@@ -106,6 +106,7 @@ socialRouter.post('/auth/google/verify', async (req, res) => {
       message: "Login successfully",
       access_token: accessToken,
       refresh_token: refreshToken,
+      user_id: user.id,
     });
   } catch (error) {
     console.error('Google verification failed:', error);

@@ -92,6 +92,7 @@ JWTRouter.post('/login', async (req, res) => {
                 maxAge: 7 * 24 * 60 * 60 * 1000
             })
             .json({
+                user_id: data.id,
                 access_token: accessToken,
                 refresh_token: refreshToken,
                 message: "Login successfully"
