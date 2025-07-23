@@ -85,6 +85,12 @@ JWTRouter.post('/login', async (req, res) => {
                 });
                 
             res
+            .clearCookie('refreshToken', { 
+                httpOnly: true,
+                path: '/',
+                sameSite: 'lax',
+                maxAge: 0
+            })
             .cookie('refreshToken', refreshToken, { 
                 httpOnly: true,
                 path: '/',
@@ -116,17 +122,33 @@ JWTRouter.post('/refresh', (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     
     if (!refreshToken) {
-        res.json({
+        console.log('No refresh token provided');
+        res
+        .clearCookie('refreshToken', { 
+            httpOnly: true,
+            path: '/',
+            sameSite: 'lax',
+            maxAge: 0
+        })
+        .status(401).json({
             message: 'Access Denied. No refresh token provided.'
-        }, 401);
+        });
         return;
     }
   
     try {
         const decoded = jwt.verify(refreshToken, publicKey, { algorithms: ['RS256'] })
 
-        const accessToken = jwt.sign(decoded , privateKey, { algorithm: 'RS256' });
-        const newRefreshToken = jwt.sign(decoded , privateKey, { algorithm: 'RS256' });
+        const accessToken = jwt.sign(
+            decoded, 
+            privateKey, 
+            { algorithm: 'RS256' }
+        );
+        const newRefreshToken = jwt.sign(
+            decoded, 
+            privateKey, 
+            { algorithm: 'RS256' }
+        );
 
         res
         .cookie('refreshToken', newRefreshToken, { 
@@ -142,9 +164,16 @@ JWTRouter.post('/refresh', (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
-        res.json({
+        res
+        .clearCookie('refreshToken', { 
+            httpOnly: true,
+            path: '/',
+            sameSite: 'lax',
+            maxAge: 0
+        })
+        .status(403).json({
             message: 'Invalid refresh token.'
-        }, 403)
+        })
     }
 });
 

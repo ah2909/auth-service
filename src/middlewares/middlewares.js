@@ -18,7 +18,7 @@ export const auth_middleware = (req, res, next) => {
   } 
   catch (error) {
     if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Token has expired' });
+      return res.status(403).json({ message: 'Token has expired' });
     } 
     else if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ message: 'Invalid token' });
