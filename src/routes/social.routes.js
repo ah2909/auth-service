@@ -99,13 +99,15 @@ socialRouter.post('/auth/google/verify', async (req, res) => {
     .clearCookie('refreshToken', { 
       httpOnly: true,
       path: '/',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 0
     })
     .cookie('refreshToken', refreshToken, { 
       httpOnly: true,
       path: '/',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     .json({
