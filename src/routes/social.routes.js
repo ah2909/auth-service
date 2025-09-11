@@ -101,14 +101,16 @@ socialRouter.post('/auth/google/verify', async (req, res) => {
       path: '/',
       secure: true,
       sameSite: 'none',
-      maxAge: 0
+      maxAge: 0,
+      domain: process.env.FRONTEND_URL
     })
     .cookie('refreshToken', refreshToken, { 
       httpOnly: true,
       path: '/',
       secure: true,
       sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      domain: process.env.FRONTEND_URL
     })
     .json({
       message: "Login successfully",

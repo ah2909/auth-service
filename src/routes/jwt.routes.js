@@ -90,14 +90,16 @@ JWTRouter.post('/login', async (req, res) => {
                 path: '/',
                 secure: true,      
                 sameSite: 'none',
-                maxAge: 0
+                maxAge: 0,
+                domain: process.env.FRONTEND_URL
             })
             .cookie('refreshToken', refreshToken, { 
                 httpOnly: true,
                 path: '/',
                 secure: true,
                 sameSite: 'none',
-                maxAge: 7 * 24 * 60 * 60 * 1000
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                domain: process.env.FRONTEND_URL
             })
             .json({
                 user_id: data.id,
@@ -131,7 +133,8 @@ JWTRouter.post('/refresh', (req, res) => {
             path: '/',
             secure: true,
             sameSite: 'none',
-            maxAge: 0
+            maxAge: 0,
+            domain: process.env.FRONTEND_URL
         })
         .status(401).json({
             message: 'Access Denied. No refresh token provided.'
@@ -159,7 +162,8 @@ JWTRouter.post('/refresh', (req, res) => {
             path: '/',
             secure: true,
             sameSite: 'none',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: process.env.FRONTEND_URL
         })
         .json({
             access_token: accessToken,
@@ -174,7 +178,8 @@ JWTRouter.post('/refresh', (req, res) => {
             path: '/',
             secure: true,
             sameSite: 'none',
-            maxAge: 0
+            maxAge: 0,
+            domain: process.env.FRONTEND_URL
         })
         .status(403).json({
             message: 'Invalid refresh token.'
@@ -188,7 +193,8 @@ JWTRouter.get('/logout', (req, res) => {
         path: '/',
         secure: true,
         sameSite: 'none',
-        maxAge: 0
+        maxAge: 0,
+        domain: process.env.FRONTEND_URL
     });
     res.json({
         message: 'Logout successfully'
