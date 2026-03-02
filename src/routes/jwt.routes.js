@@ -108,7 +108,6 @@ JWTRouter.post("/login", async (req, res) => {
 				.json({
 					user_id: data.id,
 					access_token: accessToken,
-					refresh_token: refreshToken,
 					message: "Login successfully",
 				});
 		} else {
@@ -149,10 +148,14 @@ JWTRouter.post("/refresh", (req, res) => {
 			algorithms: ["RS256"],
 		});
 
-		const accessToken = jwt.sign(decoded, privateKey, {
+		const { iat, exp, ...payload } = decoded;
+
+		const accessToken = jwt.sign(payload, privateKey, {
+			expiresIn: "1h",
 			algorithm: "RS256",
 		});
-		const newRefreshToken = jwt.sign(decoded, privateKey, {
+		const newRefreshToken = jwt.sign(payload, privateKey, {
+			expiresIn: "7d",
 			algorithm: "RS256",
 		});
 
@@ -165,7 +168,6 @@ JWTRouter.post("/refresh", (req, res) => {
 			domain: process.env.COOKIE_DOMAIN,
 		}).json({
 			access_token: accessToken,
-			refresh_token: newRefreshToken,
 			message: "Refresh expired token successfully",
 		});
 	} catch (error) {
@@ -197,6 +199,11 @@ JWTRouter.get("/logout", (req, res) => {
 	res.json({
 		message: "Logout successfully",
 	});
+});
+
+JWTRouter.get("/me", auth_middleware, (req, res) => {
+	const { id, email, name, avatar_url } = req.user;
+	res.json({ id, email, name, avatar_url });
 });
 
 JWTRouter.get("/.well-known/jwks.json", async (req, res) => {
