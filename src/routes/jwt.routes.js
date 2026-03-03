@@ -106,7 +106,6 @@ JWTRouter.post("/login", async (req, res) => {
 					domain: process.env.COOKIE_DOMAIN,
 				})
 				.json({
-					user_id: data.id,
 					access_token: accessToken,
 					message: "Login successfully",
 				});
