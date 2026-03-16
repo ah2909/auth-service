@@ -29,6 +29,7 @@ payload JWT
   "exp": 
 }
 */
+await sequelize.sync();
 
 app.listen(process.env.PORT, function(){
     console.log(`Listening on port ${process.env.PORT}`);
