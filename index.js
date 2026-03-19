@@ -4,6 +4,7 @@ import JWTRouter from "./src/routes/jwt.routes.js";
 import socialRouter from "./src/routes/social.routes.js";
 import fs from "node:fs"
 import cookieParser from "cookie-parser"
+import { sequelize } from "./src/sequelize.js"
 
 const app = express();
 export const privateKey = fs.readFileSync('id_rsa_priv.pem', 'utf8');
