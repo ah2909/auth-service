@@ -26,20 +26,14 @@ JWTRouter.post("/register", async (req, res) => {
 			password_hash: hash,
 			full_name: body.fullname || null,
 		});
-		res.json(
-			{
-				message: "Register successfully",
-			},
-			201
-		);
+		res.status(201).json({
+			message: "Register successfully",
+		});
 	} catch (error) {
 		console.log(error.message);
-		res.json(
-			{
-				error_message: error.message,
-			},
-			400
-		);
+		res.status(400).json({
+			error_message: error.message,
+		});
 	}
 });
 
