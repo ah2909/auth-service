@@ -4,6 +4,10 @@ import fs from 'fs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+if (!isProduction) {
+    console.warn('WARNING: Database SSL is disabled. Do not use this configuration in production.');
+}
+
 const sslOptions = isProduction && process.env.MARIADB_SSL_CA
     ? { ssl: { ca: fs.readFileSync(process.env.MARIADB_SSL_CA) } }
     : {};

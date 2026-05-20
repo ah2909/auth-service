@@ -1,25 +1,28 @@
 import express from "express";
-import cors from 'cors'
+import cors from 'cors';
+import cookieParser from "cookie-parser";
 import JWTRouter from "./src/routes/jwt.routes.js";
 import socialRouter from "./src/routes/social.routes.js";
-import fs from "node:fs"
-import cookieParser from "cookie-parser"
-import { sequelize } from "./src/sequelize.js"
+import { sequelize } from "./src/sequelize.js";
+
+if (!process.env.FRONTEND_URL || !process.env.BACKEND_URL) {
+    console.error('Fatal: FRONTEND_URL and BACKEND_URL must be set');
+    process.exit(1);
+}
 
 const app = express();
-export const privateKey = fs.readFileSync('id_rsa_priv.pem', 'utf8');
-export const publicKey = fs.readFileSync('id_rsa_pub.pem', 'utf8');
 
+app.set('trust proxy', 1);
 app.use(cors({
-  origin: [process.env.FRONTEND_URL, process.env.BACKEND_URL],
-  credentials: true,
-}))
-app.use(cookieParser())
-app.use(express.json())
+    origin: [process.env.FRONTEND_URL, process.env.BACKEND_URL],
+    credentials: true,
+}));
+app.use(cookieParser());
+app.use(express.json());
 app.use(JWTRouter);
-app.use(socialRouter)
+app.use(socialRouter);
 
-/* 
+/*
 payload JWT
 {
   "id": user_id,
@@ -27,11 +30,11 @@ payload JWT
   "name": ,
   "avatar_url": ,
   "iat": ,
-  "exp": 
+  "exp":
 }
 */
 await sequelize.sync();
 
-app.listen(process.env.PORT, function(){
+app.listen(process.env.PORT, function () {
     console.log(`Listening on port ${process.env.PORT}`);
 });

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { publicKey } from "../../index.js";
+import { publicKey } from "../keys.js";
 
 export const auth_middleware = (req, res, next) => {
   const authHeader = req.headers['authorization'];
