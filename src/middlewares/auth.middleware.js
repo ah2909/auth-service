@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { publicKey } from "../keys.js";
+import { publicKey } from "../config/keys.js";
 
 export const auth_middleware = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -15,14 +15,14 @@ export const auth_middleware = (req, res, next) => {
     const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
     req.user = decoded;
     next();
-  } 
+  }
   catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(403).json({ message: 'Token has expired' });
-    } 
+    }
     else if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ message: 'Invalid token' });
-    } 
+    }
     else {
       return res.status(500).json({ message: 'Internal server error' });
     }

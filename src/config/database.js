@@ -1,11 +1,11 @@
-import { Sequelize } from '@sequelize/core';
-import { MariaDbDialect } from '@sequelize/mariadb';
-import fs from 'fs';
+import { Sequelize } from "@sequelize/core";
+import { MariaDbDialect } from "@sequelize/mariadb";
+import fs from "fs";
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 if (!isProduction) {
-    console.warn('WARNING: Database SSL is disabled. Do not use this configuration in production.');
+    console.warn("WARNING: Database SSL is disabled. Do not use this configuration in production.");
 }
 
 const sslOptions = isProduction && process.env.MARIADB_SSL_CA

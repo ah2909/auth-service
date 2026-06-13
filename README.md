@@ -52,14 +52,14 @@ The frontend obtains a Google ID token via the Google Sign-In flow and sends it 
 
 ### Rate Limiting
 
-`POST /register`, `POST /login`, and `POST /auth/google/verify` are limited to **10 requests per 15-minute window** per IP, using `express-rate-limit`. The service respects `X-Forwarded-For` when deployed behind a reverse proxy (`app.set('trust proxy', 1)`).
+`POST /register`, `POST /login`, and `POST /auth/google/verify` are limited to **5 requests per 15-minute window** per IP, using `express-rate-limit`. The service respects `X-Forwarded-For` when deployed behind a reverse proxy (`app.set('trust proxy', 1)`).
 
 ### Input Validation
 
 Registration and login inputs are validated with `express-validator`:
 
 | Field | Rule |
-|-------|------|
+| --- | --- |
 | `email` | Valid email format, normalized |
 | `password` | String, 8–72 characters |
 | `fullname` | Optional string, max 50 characters |
@@ -112,7 +112,7 @@ cp .env.example .env
 ## Environment Variables
 
 | Variable | Required | Description |
-|----------|----------|-------------|
+| --- | --- | --- |
 | `PORT` | Yes | Port the service listens on (e.g. `8086`) |
 | `FRONTEND_URL` | Yes | Allowed CORS origin for the frontend |
 | `BACKEND_URL` | Yes | Allowed CORS origin for the backend service |
@@ -134,7 +134,7 @@ cp .env.example .env
 Uses MariaDB via Sequelize. Tables are created automatically on first run.
 
 | Table | Purpose |
-|-------|---------|
+| --- | --- |
 | `users` | Local accounts (email, hashed password, profile) |
 | `social_logins` | Links Google identities to user records |
 
@@ -169,9 +169,11 @@ Authenticate with email and password.
 **Body:** `{ "email": "...", "password": "..." }`
 
 **Response:**
+
 ```json
 { "access_token": "<jwt>", "message": "Login successfully" }
 ```
+
 Sets a `refreshToken` HttpOnly cookie.
 
 ---
@@ -181,6 +183,7 @@ Sets a `refreshToken` HttpOnly cookie.
 Exchange a valid refresh token cookie for a new access token and a rotated refresh token.
 
 **Response:**
+
 ```json
 { "access_token": "<jwt>", "message": "Refresh expired token successfully" }
 ```
@@ -198,6 +201,7 @@ Invalidate the current refresh token and clear the cookie.
 Return the authenticated user's profile. Requires `Authorization: Bearer <access_token>`.
 
 **Response:**
+
 ```json
 { "id": 1, "email": "...", "name": "...", "avatar_url": "..." }
 ```
@@ -219,7 +223,9 @@ Verify a Google ID token obtained by the frontend and issue auth tokens.
 **Body:** `{ "idToken": "<google_id_token>" }`
 
 **Response:**
+
 ```json
 { "access_token": "<jwt>", "message": "Login successfully" }
 ```
+
 Sets a `refreshToken` HttpOnly cookie.

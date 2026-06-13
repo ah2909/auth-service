@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "@sequelize/core";
 import User from './User.js';
-import { sequelize } from '../sequelize.js';
+import { sequelize } from '../config/database.js';
 
 class SocialLogin extends Model {}
 
